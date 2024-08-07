@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Kim</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to bottom, #e201f7, #ffccff);
+            margin: 0;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            animation: backgroundAnimation 10s infinite alternate;
+        }
+        @keyframes backgroundAnimation {
+            0% { background: linear-gradient(to bottom, #e201f7, #ffccff); }
+            50% { background: linear-gradient(to bottom, #ffccff, #e201f7); }
+            100% { background: linear-gradient(to bottom, #e201f7, #ffccff); }
+        }
+        header {
+            font-size: 3em;
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px #000000;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        img {
+            width: 200px; 
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        .cake {
+            position: relative;
+            width: 200px;
+            height: 250px;
+        }
+        .cake .layer {
+            background: #d2691e;
+            border-radius: 15px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+        .cake .layer.one {
+            width: 180px;
+            height: 60px;
+            top: 60px;
+        }
+        .cake .layer.two {
+            width: 160px;
+            height: 60px;
+            top: 120px;
+        }
+        .cake .layer.three {
+            width: 140px;
+            height: 60px;
+            top: 180px;
+        }
+        .cake .frosting {
+            background: #fffacd;
+            position: absolute;
+            border-radius: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        .cake .frosting.one {
+            width: 180px;
+            height: 15px;
+            top: 55px;
+        }
+        .cake .frosting.two {
+            width: 160px;
+            height: 15px;
+            top: 115px;
+        }
+        .cake .frosting.three {
+            width: 140px;
+            height: 15px;
+            top: 175px;
+        }
+        .cake .candle {
+            background: #ff69b4;
+            width: 10px;
+            height: 50px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 10px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            animation: flicker 1s infinite alternate;
+        }
+        .cake .flame {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 20px solid orange;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: flameFlicker 0.5s infinite alternate;
+        }
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1); }
+            100% { transform: translateX(-50%) scale(1.1); }
+        }
+        @keyframes flameFlicker {
+            0% { transform: translateX(-50%) scaleY(1); }
+            100% { transform: translateX(-50%) scaleY(1.1); }
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js"></script>
+</head>
+<body>
+    <header>Happy Birthday Baby!</header>
+    <img src="Bday.jpg" alt="Birthday Image">
+    <div class="cake">
+        <div class="layer one"></div>
+        <div class="frosting one"></div>
+        <div class="layer two"></div>
+        <div class="frosting two"></div>
+        <div class="layer three"></div>
+        <div class="frosting three"></div>
+        <div class="candle">
+            <div class="flame"></div>
+        </div>
+    </div>
+    <canvas id="fireworksCanvas"></canvas>
+    <script>
+        gsap.from("header", { duration: 2, y: -100, opacity: 0, ease: "bounce" });
+        gsap.from(".layer.one", { duration: 1.5, x: -200, opacity: 0, delay: 0.5 });
+        gsap.from(".layer.two", { duration: 1.5, x: 200, opacity: 0, delay: 1 });
+        gsap.from(".layer.three", { duration: 1.5, x: -200, opacity: 0, delay: 1.5 });
+        gsap.from(".frosting.one", { duration: 1.5, y: -200, opacity: 0, delay: 2 });
+        gsap.from(".frosting.two", { duration: 1.5, y: -200, opacity: 0, delay: 2.5 });
+        gsap.from(".frosting.three", { duration: 1.5, y: -200, opacity: 0, delay: 3 });
+        gsap.from(".candle", { duration: 1, scale: 0.5, opacity: 0, delay: 3.5 });
+        gsap.from(".flame", { duration: 1, scale: 0, opacity: 0, delay: 4 });
+        
+        gsap.to(".flame", {
+            duration: 0.5,
+            scaleY: 1.1,
+            yoyo: true,
+            repeat: -1,
+            ease: "power1.inOut"
+        });
+
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
+        let fireworks = [];
+        let particles = [];
+        const colors = ['#ff0000', '#00ff00', '#0000ff', '#ff00ff', '#00ffff', '#ffff00'];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function Firework(x, y) {
+            this.x = x;
+            this.y = y;
+            this.age = 0;
+            this.explode = function() {
+                for (let i = 0; i < 100; i++) {
+                    particles.push(new Particle(this.x, this.y, colors[Math.floor(Math.random() * colors.length)]));
+                }
+            }
+        }
+
+        function Particle(x, y, color) {
+            this.x = x;
+            this.y = y;
+            this.vx = (Math.random() - 0.5) * 5;
+            this.vy = (Math.random() - 0.5) * 5;
+            this.color = color;
+            this.age = 0;
+            this.maxAge = 100;
+            this.draw = function() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+            this.update = function() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.age++;
+                if (this.age > this.maxAge) {
+                    particles.splice(particles.indexOf(this), 1);
+                }
+            }
+        }
+
+        function update() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (Math.random() < 0.05) {
+                fireworks.push(new Firework(Math.random() * canvas.width, Math.random() * canvas.height / 2));
+            }
+            fireworks.forEach(firework => {
+                firework.age++;
+                if (firework.age > 30) {
+                    firework.explode();
+                    fireworks.splice(fireworks.indexOf(firework), 1);
+                }
+            });
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            requestAnimationFrame(update);
+        }
+        update();
+    </script>
+</body>
+</html>
